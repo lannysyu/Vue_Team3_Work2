@@ -18,12 +18,12 @@
                 <img src="./carts/4.jpg" alt="Thai Green Curry">
             </div>
             <div class="mainTab">
-                <!-- week1、2 -->
                 <div class="tabWeek" v-for="(item, key) in tabWeek" :class="{active: key == tabActive}"
                     @click="updateTab(key)">
                     {{item}}
                 </div>
             </div>
+            <!-- week1 -->
             <div v-if="tabActive == 1" class="mainItem">
                 <!-- item -->
                 <div v-for="(item, index) in cartList" :key="item.id" class="item">
@@ -64,6 +64,7 @@
                     </div>
                 </div>
             </div>
+            <!-- week2 -->
             <div v-else-if="tabActive == 2" class="mainItem">
                 <!-- item -->
                 <div v-for="(item, index) in cartListWeek2" :key="item.id" class="item">
@@ -98,7 +99,7 @@
                         <p>Subtotal:</p>
                         <div>$
                             <span class="totalPrice">
-                                {{parsePrice}}
+                                {{parsePriceWeek2}}
                             </span>
                         </div>
                     </div>
@@ -131,6 +132,15 @@
                     let total = 0
                     for (let index = 0; index < this.cartList.length; index++) {
                         const accumulator = this.cartList[index]['price'] * this.cartList[index]['count']
+                        total += accumulator
+                    }
+                    return total
+                },
+                parsePriceWeek2() {
+                    if (this.cartListWeek2.length === 0) return `0`
+                    let total = 0
+                    for (let index = 0; index < this.cartListWeek2.length; index++) {
+                        const accumulator = this.cartListWeek2[index]['price'] * this.cartListWeek2[index]['count']
                         total += accumulator
                     }
                     return total
