@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/0daa1b3f45.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="index_36.css">
+    <title>Shopping Cart</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="wrap">
+            <h1>Shopping Cart</h1>
+            <div class="headerPic">
+                <img src="./carts/4.jpg" alt="Thai Green Curry">
+            </div>
+            <div class="mainTab">
+                <!-- week1、2 -->
+                <div class="tabWeek" v-for="(item, key) in tabWeek" :class="{active: key == tabActive}"
+                    @click="updateTab(key)">
+                    {{item}}
+                </div>
+            </div>
+            <div v-if="tabActive == 1" class="mainItem">
+                <!-- item -->
+                <div v-for="(item, index) in cartList" :key="item.id" class="item">
+                    <!-- item img-->
+                    <img :src="`carts/${item.id}.jpg`" alt="item.name">
+                    <!-- itemText-->
+                    <div class="itemText">
+                        <h3> {{item.name}}</h3>
+                        <h5> {{item.desc}}</h5>
+                    </div>
+                    <!-- itemCount-->
+                    <div class="itemCount">
+                        <button class="reduce" @click="reduceCart(index)"><i class="fa-solid fa-minus"></i></button>
+                        <input type="number" class="common" v-model="item.count">
+                        <button class="increase" @click="addCart(index)"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <!-- itemPrice-->
+                    <div class="itemPrice">
+                        <p><span>$</span>{{(item.price*item.count)}}</p>
+                    </div>
+                    <!-- itemCancel-->
+                    <div class="itemCancel">
+                        <button class="cancel" @click="removeCart(index)"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+                <!-- total -->
+                <div class="total">
+                    <div class="continueButton">
+                        <a href="#">Continue Shopping</a>
+                    </div>
+                    <div class="totalText">
+                        <p>Subtotal:</p>
+                        <div>$
+                            <span class="totalPrice">
+                                {{parsePrice}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-else-if="tabActive == 2" class="mainItem">
+                <!-- item -->
+                <div v-for="(item, index) in cartListWeek2" :key="item.id" class="item">
+                    <!-- item img-->
+                    <img :src="`carts/${item.id}.jpg`" alt="item.name">
+                    <!-- itemText-->
+                    <div class="itemText">
+                        <h3> {{item.name}}</h3>
+                        <h5> {{item.desc}}</h5>
+                    </div>
+                    <!-- itemCount-->
+                    <div class="itemCount">
+                        <button class="reduce" @click="reduceCart(index)"><i class="fa-solid fa-minus"></i></button>
+                        <input type="number" class="common" v-model="item.count">
+                        <button class="increase" @click="addCart(index)"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <!-- itemPrice-->
+                    <div class="itemPrice">
+                        <p><span>$</span>{{(item.price*item.count)}}</p>
+                    </div>
+                    <!-- itemCancel-->
+                    <div class="itemCancel">
+                        <button class="cancel" @click="removeCart(index)"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+                <!-- total -->
+                <div class="total">
+                    <div class="continueButton">
+                        <a href="#">Continue Shopping</a>
+                    </div>
+                    <div class="totalText">
+                        <p>Subtotal:</p>
+                        <div>$
+                            <span class="totalPrice">
+                                {{parsePrice}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- script link -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="cartList.js"></script>
+    <script src="cartListWeek2.js"></script>
+    <script>
+        const App = Vue.createApp({
+            data() {
+                return {
+                    tabActive: 1,
+                    tabWeek: {
+                        1: 'WEEK 1',
+                        2: 'WEEK 2'
+                    },
+                    //將購物車清單先放在外js -> carts/cartList_36.js
+                    cartList: cartList,
+                    cartListWeek2: cartListWeek2
+                }
+            },
+            computed: {
+                parsePrice() {
+                    if (this.cartList.length === 0) return `0`
+                    let total = 0
+                    for (let index = 0; index < this.cartList.length; index++) {
+                        const accumulator = this.cartList[index]['price'] * this.cartList[index]['count']
+                        total += accumulator
+                    }
+                    return total
+                }
+            },
+            methods: {
+                // 切換tab
+                updateTab(index) {
+                    this.tabActive = index
+                },
+                // 禁止購物車數量<0
+                reduceCart(index) {
+                    if (this.cartList[index]['count'] == 0) return
+                    this.cartList[index]['count'] -= 1
+                },
+                // 禁止購物車數量>商品庫存數量
+                addCart(index) {
+                    if (this.cartList[index]['count'] === this.cartList[index]['stock']) return
+                    this.cartList[index]['count'] += 1
+                },
+                // 取消商品
+                removeCart(index) {
+                    this.cartList.splice(index, 1)
+                }
+            }
+        })
+        App.mount("#app");
+    </script>
+</body>
+
+</html>

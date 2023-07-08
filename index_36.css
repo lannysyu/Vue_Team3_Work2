@@ -1,0 +1,164 @@
+*{
+    padding:0;
+    margin:0;
+}
+
+h1{
+    padding:24px 0;
+    color:#333333;
+}
+
+h3{
+    padding:8px 0;
+    color:#333333;
+}
+
+.wrap{
+    width:880px;
+    margin:auto;
+    text-align:center;
+    margin-top:80px;
+    margin-bottom:80px;
+    background-color:#ccaacc55;
+}
+
+.headerPic{
+    width:100%;
+    height:160px;
+    overflow: hidden;
+    display:flex;
+    align-items: center;
+}
+
+.headerPic img{
+    width:100%;
+
+    /* object-fit失效 */
+    /* height:auto;
+    display:block;
+    object-fit: cover;
+    object-position: center; */
+}
+
+.mainTab{
+    display: flex;
+    flex-direction: row;
+    gap:16px;
+    margin: 20px 80px 0 80px;
+    
+}
+.tabWeek{
+    cursor:pointer;
+    color:#b600aa;
+    font-weight: 700;
+    padding:10px 20px;
+    border-bottom: 3px solid #b600aa;
+}
+
+.mainItem{
+    display: flex;
+    flex-direction: column;
+    margin:40px 80px;
+    gap:36px;
+}
+
+.item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:32px;
+}
+
+.item img{
+    width:150px;
+    height: 150px;
+    overflow:hidden;
+    display:flex;
+    align-items: center;
+}
+
+.itemText{
+    text-align:start;
+}
+
+.itemCount{
+    margin-left:auto;
+    width:auto;
+}
+
+.reduce,
+.increase{
+    background-color: transparent;
+    border: none;
+    background-color: #b600aa20;
+    color: #333333;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.cancel{
+    background-color: transparent;
+    border: none;
+    color: #333333;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.cancel:hover{
+    background-color: #b600aa;
+    border-radius: 50%;
+    color:#ffffff;
+}
+
+.itemPrice{
+    font-size: 20px;
+    font-weight: 700;
+    width:48px;
+}
+
+.itemPrice p{
+    display: flex;
+    justify-content: space-between;
+}
+
+.itemCount input{
+    width:28px;
+    background-color: transparent;
+    border: none;
+    padding:4px 2px;
+    margin:0 8px;
+    text-align: center;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.total{
+    padding-bottom:40px;
+    display: flex;
+    justify-content:space-between;
+    font-size: 20px;
+}
+
+.totalText{
+    display: flex;
+    font-weight: 700;
+    color:#333333;
+}
+.totalText p{
+    padding-right:16px;
+}
+
+.continueButton a{
+    color:#333333;
+}
