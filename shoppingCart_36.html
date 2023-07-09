@@ -26,7 +26,7 @@
             <!-- week1 -->
             <div v-if="tabActive == 1" class="mainItem">
                 <!-- item -->
-                <div v-for="(item, index) in cartList" :key="item.id" class="item">
+                <div v-for="(item, index) in filteredCartList" :key="item.id" class="item">
                     <!-- item img-->
                     <img :src="`carts/${item.id}.jpg`" alt="item.name">
                     <!-- itemText-->
@@ -67,7 +67,7 @@
             <!-- week2 -->
             <div v-else-if="tabActive == 2" class="mainItem">
                 <!-- item -->
-                <div v-for="(item, index) in cartListWeek2" :key="item.id" class="item">
+                <div v-for="(item, index) in filteredCartListWeek2" :key="item.id" class="item">
                     <!-- item img-->
                     <img :src="`carts/${item.id}.jpg`" alt="item.name">
                     <!-- itemText-->
@@ -77,9 +77,9 @@
                     </div>
                     <!-- itemCount-->
                     <div class="itemCount">
-                        <button class="reduce" @click="reduceCart(index)"><i class="fa-solid fa-minus"></i></button>
+                        <button class="reduce" @click="reduceCartWeek2(index)"><i class="fa-solid fa-minus"></i></button>
                         <input type="number" class="common" v-model="item.count">
-                        <button class="increase" @click="addCart(index)"><i class="fa-solid fa-plus"></i></button>
+                        <button class="increase" @click="addCartWeek2(index)"><i class="fa-solid fa-plus"></i></button>
                     </div>
                     <!-- itemPrice-->
                     <div class="itemPrice">
@@ -87,7 +87,7 @@
                     </div>
                     <!-- itemCancel-->
                     <div class="itemCancel">
-                        <button class="cancel" @click="removeCart(index)"><i class="fa-solid fa-xmark"></i></button>
+                        <button class="cancel" @click="removeCartWeek2(index)"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                 </div>
                 <!-- total -->
@@ -111,7 +111,6 @@
     <!-- script link -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="cartList.js"></script>
-    <script src="cartListWeek2.js"></script>
     <script>
         const App = Vue.createApp({
             data() {
@@ -123,24 +122,32 @@
                     },
                     //將購物車清單先放在外js -> carts/cartList_36.js
                     cartList: cartList,
-                    cartListWeek2: cartListWeek2
+                    // cartListWeek2: cartListWeek2
                 }
             },
             computed: {
+                filteredCartList() {
+                    return this.cartList.filter(item => item.id >= 1 && item.id <= 3);
+                },
+                filteredCartListWeek2() {
+                    return this.cartList.filter(item => item.id >= 4 && item.id <= 5);
+                },
                 parsePrice() {
-                    if (this.cartList.length === 0) return `0`
+                    const filteredCartList = this.cartList.filter(item => item.id >= 1 && item.id <= 3);
+                    if (filteredCartList.length === 0) return `0`
                     let total = 0
-                    for (let index = 0; index < this.cartList.length; index++) {
-                        const accumulator = this.cartList[index]['price'] * this.cartList[index]['count']
+                    for (let index = 0; index < filteredCartList.length; index++) {
+                        const accumulator = filteredCartList[index]['price'] * filteredCartList[index]['count']
                         total += accumulator
                     }
                     return total
                 },
                 parsePriceWeek2() {
-                    if (this.cartListWeek2.length === 0) return `0`
+                    const filteredCartListWeek2 = this.cartList.filter(item => item.id >= 4 && item.id <= 5);
+                    if (filteredCartListWeek2.length === 0) return `0`
                     let total = 0
-                    for (let index = 0; index < this.cartListWeek2.length; index++) {
-                        const accumulator = this.cartListWeek2[index]['price'] * this.cartListWeek2[index]['count']
+                    for (let index = 0; index < filteredCartListWeek2.length; index++) {
+                        const accumulator = filteredCartListWeek2[index]['price'] * filteredCartListWeek2[index]['count']
                         total += accumulator
                     }
                     return total
@@ -156,14 +163,39 @@
                     if (this.cartList[index]['count'] == 0) return
                     this.cartList[index]['count'] -= 1
                 },
+                // Week2禁止購物車數量<0
+                reduceCartWeek2(index) {
+                    const filteredCartListWeek2 = this.cartList.filter(item => item.id >= 4 && item.id <= 5);
+                    if (filteredCartListWeek2[index]['count'] == 0) return
+                    filteredCartListWeek2[index]['count'] -= 1
+                },
                 // 禁止購物車數量>商品庫存數量
                 addCart(index) {
                     if (this.cartList[index]['count'] === this.cartList[index]['stock']) return
                     this.cartList[index]['count'] += 1
                 },
+                // Week2禁止購物車數量>商品庫存數量
+                addCartWeek2(index) {
+                    const filteredCartListWeek2 = this.cartList.filter(item => item.id >= 4 && item.id <= 5);
+                    if (filteredCartListWeek2[index]['count'] === filteredCartListWeek2[index]['stock']) return
+                    filteredCartListWeek2[index]['count'] += 1
+                },
                 // 取消商品
                 removeCart(index) {
                     this.cartList.splice(index, 1)
+                },
+                // Week2取消商品(看不懂QQ)
+                removeCartWeek2(index) {
+                    const filteredIndexes = this.cartList.reduce((acc, item, currentIndex) => {
+                        if (item.id >= 4 && item.id <= 5) {
+                        acc.push(currentIndex);
+                    }
+                    return acc;
+                    }, []);
+                    const itemIndex = filteredIndexes[index];
+                    if (itemIndex !== undefined) {
+                    this.cartList.splice(itemIndex, 1);
+                    }
                 }
             }
         })
